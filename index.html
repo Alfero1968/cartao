@@ -45,6 +45,7 @@
   .cartao{border-radius:20px;overflow:hidden;background:var(--fundo-card);border:1px solid var(--borda);margin:18px 0 14px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
   .topo{background:var(--cor);padding:26px 20px 52px;color:#fff;text-align:center}
   .topo .evento{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+  .topo .organizacao{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
   .avatar{width:92px;height:92px;border-radius:50%;margin:-46px auto 0;display:flex;align-items:center;justify-content:center;
           font-size:2.1rem;font-weight:800;color:#fff;background:var(--cor);border:5px solid var(--fundo-card)}
   .corpo{padding:10px 20px 20px;text-align:center}
@@ -111,7 +112,7 @@
   <!-- ============ CARTÃO (visto por todos) ============ -->
   <section id="telaCartao" class="oculto">
     <div class="cartao">
-      <div class="topo"><div class="evento" id="c-evento"></div></div>
+      <div class="topo"><div class="evento" id="c-evento"></div><div class="organizacao" id="c-organizacao"></div></div>
       <div class="avatar" id="c-avatar"></div>
       <div class="corpo">
         <div class="nome" id="c-nome"></div>
@@ -164,6 +165,7 @@
 <script>
 // ===== Ajuste aqui para cada evento =====
 const EVENTO = 'Encontro de Networking · 20/10';
+const ORGANIZACAO = 'ACIAS - SUMARÉ - ION'; // linha abaixo do evento (deixe vazio para esconder)
 const CORES = ['#2563EB','#0F766E','#7C3AED','#DB2777','#EA580C','#0F172A'];
 const LIMITE_TAG = 480; // NTAG215 guarda ~496 bytes de dados; deixamos margem
 
@@ -230,7 +232,7 @@ function vcard(d){
   if (d.site) linhas.push(`URL:${esc(urlSite(d.site))}`);
   if (d.linkedin) linhas.push(`URL;TYPE=LinkedIn:${esc(urlLinkedin(d.linkedin))}`);
   if (d.insta) linhas.push(`URL;TYPE=Instagram:https://instagram.com/${esc(usuarioInsta(d.insta))}`);
-  const nota = [d.frase, 'Conhecido(a) no ' + EVENTO].filter(Boolean).join(' — ');
+  const nota = [d.frase, 'Conhecido(a) no ' + EVENTO + (ORGANIZACAO ? ' (' + ORGANIZACAO + ')' : '')].filter(Boolean).join(' — ');
   linhas.push(`NOTE:${esc(nota)}`, 'END:VCARD');
   return linhas.join('\r\n');
 }
@@ -254,6 +256,7 @@ function renderCartao(d, dono){
   document.documentElement.style.setProperty('--cor', CORES[+d.cor] || CORES[0]);
   document.title = d.nome + ' · Cartão Digital';
   $('c-evento').textContent = EVENTO;
+  $('c-organizacao').textContent = ORGANIZACAO;
   $('c-avatar').textContent = iniciais(d.nome).toUpperCase();
   $('c-nome').textContent = d.nome;
   $('c-cargo').textContent = d.cargo;
